@@ -1,15 +1,14 @@
 import React from "react";
-import { useState } from "react";
-import { ToggleButtonGroup, ToggleButton } from "react-bootstrap";
+import { ToggleButtonGroup, ToggleButton, Row, Col } from "react-bootstrap";
 import "./MatchupCard.css";
 
-const MatchupCard = ({ match }) => {
-  const [value, setValue] = useState([]);
-  const handleChange = (val) => setValue(val);
+const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
+  const handleChange = (val) => {
+    onSelectionChange(match.id, val); // Notify parent when selection changes
+  };
 
   return (
     <div className="matchup-card">
-      {/* Home team row */}
       <div className="team-row">
         <div className="team-info">
           <img
@@ -17,32 +16,32 @@ const MatchupCard = ({ match }) => {
             alt={`${match.homeTeam.displayName} logo`}
             className="team-logo"
           />
-          <h5 className="team-name">{match.homeTeam.displayName}</h5>
+          <span className="team-name">{match.homeTeam.displayName}</span>
         </div>
         <div className="team-odds">
           <ToggleButtonGroup
             type="checkbox"
-            value={value}
+            value={selectedBets} // Use selectedBets from props
             onChange={handleChange}
             className="toggle-group"
           >
             <ToggleButton
               id={`${match.id}-hometeam-point-spread`}
-              value={`${match.id}-1`}
+              value={`${match.homeTeam.abbreviation} ${match.homeTeam.pointSpread} ${match.homeTeam.spreadOdds}`}
               className="toggle-button"
             >
               {match.homeTeam.pointSpread} {match.homeTeam.spreadOdds}
             </ToggleButton>
             <ToggleButton
               id={`${match.id}-hometeam-money-line`}
-              value={`${match.id}-3`}
+              value={`${match.homeTeam.abbreviation} ML ${match.homeTeam.moneyLine}`}
               className="toggle-button"
             >
               ML {match.homeTeam.moneyLine}
             </ToggleButton>
             <ToggleButton
               id={`${match.id}-over`}
-              value={`${match.id}-7`}
+              value={`O ${match.totals.overUnder} ${match.totals.overOdds}`}
               className="toggle-button"
             >
               O {match.totals.overUnder} {match.totals.overOdds}
@@ -51,7 +50,6 @@ const MatchupCard = ({ match }) => {
         </div>
       </div>
 
-      {/* Away team row */}
       <div className="team-row">
         <div className="team-info">
           <img
@@ -59,32 +57,32 @@ const MatchupCard = ({ match }) => {
             alt={`${match.awayTeam.displayName} logo`}
             className="team-logo"
           />
-          <h5 className="team-name">{match.awayTeam.displayName}</h5>
+          <span className="team-name">{match.awayTeam.displayName}</span>
         </div>
         <div className="team-odds">
           <ToggleButtonGroup
             type="checkbox"
-            value={value}
+            value={selectedBets}
             onChange={handleChange}
             className="toggle-group"
           >
             <ToggleButton
               id={`${match.id}-awayteam-point-spread`}
-              value={`${match.id}-5`}
+              value={`${match.awayTeam.abbreviation} ${match.awayTeam.pointSpread} ${match.awayTeam.spreadOdds}`}
               className="toggle-button"
             >
               {match.awayTeam.pointSpread} {match.awayTeam.spreadOdds}
             </ToggleButton>
             <ToggleButton
               id={`${match.id}-awayteam-money-line`}
-              value={`${match.id}-6`}
+              value={`${match.homeTeam.abbreviation} ML ${match.awayTeam.moneyLine}`}
               className="toggle-button"
             >
               ML {match.awayTeam.moneyLine}
             </ToggleButton>
             <ToggleButton
               id={`${match.id}-under`}
-              value={`${match.id}-8`}
+              value={`U ${match.totals.overUnder} ${match.totals.underOdds}`}
               className="toggle-button"
             >
               U {match.totals.overUnder} {match.totals.underOdds}
