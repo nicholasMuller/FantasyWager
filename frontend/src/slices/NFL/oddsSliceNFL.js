@@ -30,6 +30,7 @@ export const oddsSliceNFL = async () => {
 
           // Structure the data
           const matchup = {
+            id: gameID,
             totals: {
               overUnder: oddsData.overUnder || null,
               overOdds: oddsData.overOdds || null,

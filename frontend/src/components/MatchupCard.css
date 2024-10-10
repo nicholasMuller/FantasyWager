@@ -14,7 +14,7 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 15px;
     margin: 10px;
-    width: 300px; /* Width of the card */
+    width: 600px; /* Width of the card */
     transition: transform 0.3s; /* Animation for hover effect */
 }
 
