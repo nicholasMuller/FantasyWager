@@ -1,5 +1,8 @@
 import { oddsSliceNFL } from "../../slices/NFL/oddsSliceNFL";
 import { useEffect, useState } from 'react';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import MatchupCard from "../../components/MatchupCard";
 const NFLOddsScreen = () => {
     const [matchups, setWeekData] = useState([]);
@@ -32,11 +35,18 @@ const NFLOddsScreen = () => {
     return (
         <div>
             <h1>NFL Odds Page</h1>
-            { !loading &&
-                matchups.map((match, index) => (
-                    <MatchupCard key={index} match={match} />
-                )
-            )}
+            <Container>
+                <Row>
+                    { !loading &&
+                        matchups.map((match, index) => (
+                            <Col>
+                            <MatchupCard key={index} match={match} />
+                            </Col>
+                        )
+
+                    )}
+                </Row>
+            </Container>
         </div>
     );
 };

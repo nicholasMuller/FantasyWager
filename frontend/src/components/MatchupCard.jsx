@@ -8,14 +8,14 @@ const MatchupCard = ({ match }) => {
             <div className="odds-container">
                 <div className="team-info">
                     <img src={match.homeTeam.logo} alt={`${match.homeTeam.displayName} logo`} className="team-logo" />
-                    <h3 className="team-name">{match.homeTeam.displayName}</h3>
+                    <h5 className="team-name">{match.homeTeam.displayName}</h5>
                     <p className="team-odds">Odds: {match.homeTeam.spreadOdds}</p>
                     <p className="team-point-spread">Point Spread: {match.homeTeam.pointSpread}</p>
                     <p className="team-money-line">Money Line: {match.homeTeam.moneyLine}</p>
                 </div>
                 <div className="team-info">
                     <img src={match.awayTeam.logo} alt={`${match.awayTeam.displayName} logo`} className="team-logo" />
-                    <h3 className="team-name">{match.awayTeam.displayName}</h3>
+                    <h5 className="team-name">{match.awayTeam.displayName}</h5>
                     <p className="team-odds">Odds: {match.awayTeam.spreadOdds}</p>
                     <p className="team-point-spread">Point Spread: {match.awayTeam.pointSpread}</p>
                     <p className="team-money-line">Money Line: {match.awayTeam.moneyLine}</p>
