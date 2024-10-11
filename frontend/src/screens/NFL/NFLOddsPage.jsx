@@ -56,15 +56,18 @@ const NFLOddsScreen = () => {
 
       <Container>
         <Row>
-          {matchups.map((match) => (
-            <Col key={match.id}>
-              <MatchupCard
-                match={match}
-                onSelectionChange={handleSelection}
-                selectedBets={selectedBets[match.id] || []} // Pass selected bets for each match
-              />
-            </Col>
-          ))}
+          {matchups.map(
+            (match) =>
+              match.status == "STATUS_SCHEDULED" && (
+                <Col key={match.id}>
+                  <MatchupCard
+                    match={match}
+                    onSelectionChange={handleSelection}
+                    selectedBets={selectedBets[match.id] || []} // Pass selected bets for each match
+                  />
+                </Col>
+              )
+          )}
         </Row>
       </Container>
     </div>

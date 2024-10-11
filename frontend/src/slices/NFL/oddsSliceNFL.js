@@ -1,10 +1,12 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const oddsSliceNFL = async () => {
   try {
     // Make a GET request to retrieve NFL weekly data
-    const response = await axios.get('http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard');
-    
+    const response = await axios.get(
+      "http://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard"
+    );
+
     // Initialize an array to hold game data
     const matchups = [];
 
@@ -12,10 +14,13 @@ export const oddsSliceNFL = async () => {
     if (response.data && response.data["events"]) {
       for (const event of response.data["events"]) {
         const gameID = event["id"];
+        const gameStatus = event["status"]["type"]["name"];
 
         try {
           // Fetch odds for the current game
-          const oddsResponse = await axios.get(`http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/${gameID}/competitions/${gameID}/odds?lang=en&region=us`);
+          const oddsResponse = await axios.get(
+            `http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/${gameID}/competitions/${gameID}/odds?lang=en&region=us`
+          );
           const oddsData = oddsResponse.data["items"][0];
 
           // Fetch home team details from $ref
@@ -31,6 +36,7 @@ export const oddsSliceNFL = async () => {
           // Structure the data
           const matchup = {
             id: gameID,
+            status: gameStatus,
             totals: {
               overUnder: oddsData.overUnder || null,
               overOdds: oddsData.overOdds || null,
@@ -42,8 +48,10 @@ export const oddsSliceNFL = async () => {
               shortDisplayName: homeTeamData.shortDisplayName || null,
               logo: homeTeamData.logos?.[0]?.href || null,
               spreadOdds: oddsData.homeTeamOdds.spreadOdds || null,
-              pointSpread: oddsData.homeTeamOdds.open?.pointSpread?.american || null,
-              moneyLine: oddsData.homeTeamOdds.open?.moneyLine?.american || null,
+              pointSpread:
+                oddsData.homeTeamOdds.open?.pointSpread?.american || null,
+              moneyLine:
+                oddsData.homeTeamOdds.open?.moneyLine?.american || null,
             },
             awayTeam: {
               displayName: awayTeamData.displayName || null,
@@ -51,15 +59,20 @@ export const oddsSliceNFL = async () => {
               shortDisplayName: awayTeamData.shortDisplayName || null,
               logo: awayTeamData.logos?.[0]?.href || null,
               spreadOdds: oddsData.awayTeamOdds.spreadOdds || null,
-              pointSpread: oddsData.awayTeamOdds.open?.pointSpread?.american || null,
-              moneyLine: oddsData.awayTeamOdds.open?.moneyLine?.american || null,
+              pointSpread:
+                oddsData.awayTeamOdds.open?.pointSpread?.american || null,
+              moneyLine:
+                oddsData.awayTeamOdds.open?.moneyLine?.american || null,
             },
           };
 
           // Add this game data to the matchups array
           matchups.push(matchup);
         } catch (error) {
-          console.error(`Error retrieving odds or team details for game ID: ${gameID}`, error);
+          console.error(
+            `Error retrieving odds or team details for game ID: ${gameID}`,
+            error
+          );
         }
       }
     }
@@ -67,7 +80,7 @@ export const oddsSliceNFL = async () => {
     // Return the collected matchups data
     return matchups;
   } catch (error) {
-    console.error('Error retrieving weekly NFL data:', error);
+    console.error("Error retrieving weekly NFL data:", error);
     return [];
   }
 };
