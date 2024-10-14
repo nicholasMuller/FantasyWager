@@ -27,21 +27,21 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
           >
             <ToggleButton
               id={`${match.id}-hometeam-point-spread`}
-              value={`${match.homeTeam.abbreviation} ${match.homeTeam.pointSpread} ${match.homeTeam.spreadOdds}`}
+              value={`POINT_SPREAD ${match.homeTeam.abbreviation} ${match.homeTeam.pointSpread} ${match.homeTeam.spreadOdds}`}
               className="toggle-button"
             >
               {match.homeTeam.pointSpread} {match.homeTeam.spreadOdds}
             </ToggleButton>
             <ToggleButton
               id={`${match.id}-hometeam-money-line`}
-              value={`${match.homeTeam.abbreviation} ML ${match.homeTeam.moneyLine}`}
+              value={`ML ${match.homeTeam.abbreviation} 0 ${match.homeTeam.moneyLine}`}
               className="toggle-button"
             >
               ML {match.homeTeam.moneyLine}
             </ToggleButton>
             <ToggleButton
               id={`${match.id}-over`}
-              value={`O ${match.totals.overUnder} ${match.totals.overOdds}`}
+              value={`OVER TOTAL ${match.totals.overUnder} ${match.totals.overOdds}`}
               className="toggle-button"
             >
               O {match.totals.overUnder} {match.totals.overOdds}
@@ -68,21 +68,21 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
           >
             <ToggleButton
               id={`${match.id}-awayteam-point-spread`}
-              value={`${match.awayTeam.abbreviation} ${match.awayTeam.pointSpread} ${match.awayTeam.spreadOdds}`}
+              value={`POINT_SPREAD ${match.awayTeam.abbreviation} ${match.awayTeam.pointSpread} ${match.awayTeam.spreadOdds}`}
               className="toggle-button"
             >
               {match.awayTeam.pointSpread} {match.awayTeam.spreadOdds}
             </ToggleButton>
             <ToggleButton
               id={`${match.id}-awayteam-money-line`}
-              value={`${match.homeTeam.abbreviation} ML ${match.awayTeam.moneyLine}`}
+              value={`ML ${match.homeTeam.abbreviation} 0 ${match.awayTeam.moneyLine}`}
               className="toggle-button"
             >
               ML {match.awayTeam.moneyLine}
             </ToggleButton>
             <ToggleButton
               id={`${match.id}-under`}
-              value={`U ${match.totals.overUnder} ${match.totals.underOdds}`}
+              value={`UNDER TOTAL ${match.totals.overUnder} ${match.totals.underOdds}`}
               className="toggle-button"
             >
               U {match.totals.overUnder} {match.totals.underOdds}

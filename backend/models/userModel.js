@@ -18,10 +18,11 @@ const userSchema = mongoose.Schema(
     },
     bets: [
       {
-        gameID: String,
+        matchID: String,
         betType: String,
-        description: String,
-        value: Number,
+        team: String,
+        winDiff: String,
+        odds: Number,
       },
     ],
   },
