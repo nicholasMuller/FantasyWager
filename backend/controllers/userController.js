@@ -144,6 +144,20 @@ const placeBet = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get user bets
+// @route   GET /api/users/bets
+// @access  Private
+const getUserBets = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    res.json(user.bets);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
 export {
   authUser,
   registerUser,
@@ -151,4 +165,5 @@ export {
   getUserProfile,
   updateUserProfile,
   placeBet,
+  getUserBets,
 };

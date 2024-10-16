@@ -6,6 +6,7 @@ import {
   getUserProfile,
   updateUserProfile,
   placeBet,
+  getUserBets,
 } from "../controllers/userController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -20,5 +21,6 @@ router
   .put(protect, updateUserProfile);
 
 router.post("/bets", protect, placeBet);
+router.get("/bets", protect, getUserBets);
 
 export default router;

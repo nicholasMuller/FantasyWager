@@ -37,6 +37,12 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    getBets: builder.query({
+      query: () => ({
+        url: `${USERS_URL}/bets`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -46,4 +52,5 @@ export const {
   useRegisterMutation,
   useUpdateUserMutation,
   usePlaceBetMutation,
+  useGetBetsQuery,
 } = userApiSlice;

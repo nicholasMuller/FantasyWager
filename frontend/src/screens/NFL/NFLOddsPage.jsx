@@ -40,15 +40,45 @@ const NFLOddsScreen = () => {
   const handleSubmit = async () => {
     try {
       for (const matchId in selectedBets) {
-        console.log(matchId, selectedBets[matchId]);
-        const betData = {
-          matchID: matchId,
-          ...selectedBets[matchId],
-        };
-        // await placeBet(betData).unwrap();
+        const matches = selectedBets[matchId];
+
+        for (const match of matches) {
+          console.log("Original match string:", match);
+
+          const parts = match.split(" ");
+          if (parts.length !== 4) {
+            console.log("Unexpected format:", match);
+            continue;
+          }
+
+          const [betType, team, winDiff, odds] = parts;
+          // console.log(
+          //   "Parsed values - betType:",
+          //   betType,
+          //   "team:",
+          //   team,
+          //   "winDiff:",
+          //   winDiff,
+          //   "odds:",
+          //   odds
+          // );
+
+          const betData = {
+            matchID: matchId,
+            betType: betType,
+            team: team,
+            winDiff: winDiff,
+            odds: odds,
+          };
+
+          console.log("Bet data object:", betData);
+          await placeBet(betData).unwrap();
+        }
       }
+
       alert("Bets placed successfully!");
     } catch (err) {
+      console.log(err);
       alert("Failed to place bets.");
     }
   };
