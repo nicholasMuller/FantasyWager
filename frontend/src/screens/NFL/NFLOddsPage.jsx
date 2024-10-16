@@ -72,7 +72,9 @@ const NFLOddsScreen = () => {
                   <MatchupCard
                     match={match}
                     onSelectionChange={handleSelection}
-                    selectedBets={selectedBets[match.id] || []}
+                    selectedBets={
+                      selectedBets[match["eventInfo"]["gameId"]] || []
+                    }
                   />
                 </Col>
               )
