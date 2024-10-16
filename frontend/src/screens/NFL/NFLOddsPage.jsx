@@ -1,5 +1,5 @@
 import { usePlaceBetMutation } from "../../slices/usersApiSlice";
-import { oddsSliceNFL } from "../../slices/NFL/oddsSliceNFL";
+import { getNFLEvents } from "../../slices/NFL/getNFLEvents";
 import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -17,9 +17,10 @@ const NFLOddsScreen = () => {
   useEffect(() => {
     const getWeekData = async () => {
       try {
-        const weekData = await oddsSliceNFL();
+        const weekData = await getNFLEvents();
         setWeekData(weekData);
       } catch (error) {
+        console.log(error);
         setError("Failed to load NFL week data");
       } finally {
         setLoading(false);
@@ -39,11 +40,12 @@ const NFLOddsScreen = () => {
   const handleSubmit = async () => {
     try {
       for (const matchId in selectedBets) {
+        console.log(matchId, selectedBets[matchId]);
         const betData = {
           matchID: matchId,
           ...selectedBets[matchId],
         };
-        await placeBet(betData).unwrap();
+        // await placeBet(betData).unwrap();
       }
       alert("Bets placed successfully!");
     } catch (err) {
@@ -54,6 +56,7 @@ const NFLOddsScreen = () => {
   if (loading || isPlacingBet) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
+  // console.log(matchups);
   return (
     <div>
       <h1>NFL Odds Page</h1>
@@ -64,8 +67,8 @@ const NFLOddsScreen = () => {
         <Row>
           {matchups.map(
             (match) =>
-              match.status === "STATUS_SCHEDULED" && (
-                <Col key={match.id}>
+              match["eventInfo"]["status"] === "STATUS_SCHEDULED" && (
+                <Col key={match["eventInfo"]["gameId"]}>
                   <MatchupCard
                     match={match}
                     onSelectionChange={handleSelection}

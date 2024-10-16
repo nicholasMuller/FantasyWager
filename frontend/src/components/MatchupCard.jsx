@@ -4,7 +4,7 @@ import "./MatchupCard.css";
 
 const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
   const handleChange = (val) => {
-    onSelectionChange(match.id, val); // Notify parent when selection changes
+    onSelectionChange(match["eventInfo"]["gameId"], val); // Notify parent when selection changes
   };
 
   return (
@@ -12,11 +12,13 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
       <div className="team-row">
         <div className="team-info">
           <img
-            src={match.homeTeam.logo}
-            alt={`${match.homeTeam.displayName} logo`}
+            src={match["eventInfo"]["teams"]["homeTeam"]["logo"]}
+            alt={`${match["eventInfo"]["teams"]["homeTeam"]["displayName"]} logo`}
             className="team-logo"
           />
-          <span className="team-name">{match.homeTeam.displayName}</span>
+          <span className="team-name">
+            {match["eventInfo"]["teams"]["homeTeam"]["displayName"]}
+          </span>
         </div>
         <div className="team-odds">
           <ToggleButtonGroup
@@ -26,25 +28,27 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
             className="toggle-group"
           >
             <ToggleButton
-              id={`${match.id}-hometeam-point-spread`}
-              value={`POINT_SPREAD ${match.homeTeam.abbreviation} ${match.homeTeam.pointSpread} ${match.homeTeam.spreadOdds}`}
+              id={`${match["eventInfo"]["gameId"]}-hometeam-point-spread`}
+              value={`POINT_SPREAD ${match["eventInfo"]["teams"]["homeTeam"]["abbreviation"]} ${match["odds"]["homeTeam"]["pointSpread"]} ${match["odds"]["homeTeam"]["spreadOdds"]}`}
               className="toggle-button"
             >
-              {match.homeTeam.pointSpread} {match.homeTeam.spreadOdds}
+              {match["odds"]["homeTeam"]["pointSpread"]}{" "}
+              {match["odds"]["homeTeam"]["spreadOdds"]}
             </ToggleButton>
             <ToggleButton
-              id={`${match.id}-hometeam-money-line`}
-              value={`ML ${match.homeTeam.abbreviation} 0 ${match.homeTeam.moneyLine}`}
+              id={`${match["eventInfo"]["gameId"]}-hometeam-money-line`}
+              value={`ML ${match["eventInfo"]["teams"]["homeTeam"]["abbreviation"]} 0 ${match["odds"]["homeTeam"]["moneyLine"]}`}
               className="toggle-button"
             >
-              ML {match.homeTeam.moneyLine}
+              ML {match["odds"]["homeTeam"]["moneyLine"]}
             </ToggleButton>
             <ToggleButton
-              id={`${match.id}-over`}
-              value={`OVER TOTAL ${match.totals.overUnder} ${match.totals.overOdds}`}
+              id={`${match["eventInfo"]["gameId"]}-over`}
+              value={`OVER TOTAL ${match["odds"]["totals"]["overUnder"]} ${match["odds"]["totals"]["overOdds"]}`}
               className="toggle-button"
             >
-              O {match.totals.overUnder} {match.totals.overOdds}
+              O {match["odds"]["totals"]["overUnder"]}{" "}
+              {match["odds"]["totals"]["overOdds"]}
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
@@ -53,11 +57,13 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
       <div className="team-row">
         <div className="team-info">
           <img
-            src={match.awayTeam.logo}
-            alt={`${match.awayTeam.displayName} logo`}
+            src={match["eventInfo"]["teams"]["awayTeam"]["logo"]}
+            alt={`${match["eventInfo"]["teams"]["awayTeam"]["displayName"]} logo`}
             className="team-logo"
           />
-          <span className="team-name">{match.awayTeam.displayName}</span>
+          <span className="team-name">
+            {match["eventInfo"]["teams"]["awayTeam"]["displayName"]}
+          </span>
         </div>
         <div className="team-odds">
           <ToggleButtonGroup
@@ -67,25 +73,27 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
             className="toggle-group"
           >
             <ToggleButton
-              id={`${match.id}-awayteam-point-spread`}
-              value={`POINT_SPREAD ${match.awayTeam.abbreviation} ${match.awayTeam.pointSpread} ${match.awayTeam.spreadOdds}`}
+              id={`${match["eventInfo"]["gameId"]}-awayteam-point-spread`}
+              value={`POINT_SPREAD ${match["eventInfo"]["teams"]["awayTeam"]["abbreviation"]} ${match["odds"]["awayTeam"]["pointSpread"]} ${match["odds"]["awayTeam"]["spreadOdds"]}`}
               className="toggle-button"
             >
-              {match.awayTeam.pointSpread} {match.awayTeam.spreadOdds}
+              {match["odds"]["awayTeam"]["pointSpread"]}{" "}
+              {match["odds"]["awayTeam"]["spreadOdds"]}
             </ToggleButton>
             <ToggleButton
-              id={`${match.id}-awayteam-money-line`}
-              value={`ML ${match.homeTeam.abbreviation} 0 ${match.awayTeam.moneyLine}`}
+              id={`${match["eventInfo"]["gameId"]}-awayteam-money-line`}
+              value={`ML ${match["eventInfo"]["teams"]["awayTeam"]["abbreviation"]} 0 ${match["odds"]["awayTeam"]["moneyLine"]}`}
               className="toggle-button"
             >
-              ML {match.awayTeam.moneyLine}
+              ML {match["odds"]["awayTeam"]["moneyLine"]}
             </ToggleButton>
             <ToggleButton
-              id={`${match.id}-under`}
-              value={`UNDER TOTAL ${match.totals.overUnder} ${match.totals.underOdds}`}
+              id={`${match["eventInfo"]["gameId"]}-under`}
+              value={`UNDER TOTAL ${match["odds"]["totals"]["overUnder"]} ${match["odds"]["totals"]["underOdds"]}`}
               className="toggle-button"
             >
-              U {match.totals.overUnder} {match.totals.underOdds}
+              U {match["odds"]["totals"]["overUnder"]}{" "}
+              {match["odds"]["totals"]["underOdds"]}
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
