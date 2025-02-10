@@ -1,15 +1,15 @@
 import axios from "axios";
 
-export const getNFLEvents = async () => {
+export const getNBAEvents = async () => {
   const events = await getWeeklyGameIds();
   let matchups = [];
   for (const eventId of events) {
     let eventResponse = await axios.get(
-      `http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/${eventId}?lang=en&region=us`
+      `http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/${eventId}?lang=en&region=us`
     );
     eventResponse = eventResponse.data;
     let oddsResponse = await axios.get(
-      `http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/${eventId}/competitions/${eventId}/odds?lang=en&region=us`
+      `http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/${eventId}/competitions/${eventId}/odds?lang=en&region=us`
     );
     oddsResponse = oddsResponse.data;
 
@@ -88,31 +88,20 @@ export const getNFLEvents = async () => {
 
 // Gets all of the GameIds for the next 2 weeks. Returns an array of GameId strings
 const getWeeklyGameIds = async () => {
-  let response = await axios.get(
-    "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/"
-  );
-  const currentWeek = response.data["season"]["type"]["week"]["number"];
-  const nextWeek = currentWeek + 1;
-
-  const displayWeeks = [currentWeek];
-
   let weeklyEvents = [];
+  let response = await axios.get(
+    `http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events?lang=en&region=us`
+  );
+  let regex = /[0-9]+/g; // Use the global flag to find all matches in the string
 
-  for (let week of displayWeeks) {
-    response = await axios.get(
-      `http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2025/types/2/weeks/${week}/events?lang=en&region=us`
-    );
-    let regex = /[0-9]+/g; // Use the global flag to find all matches in the string
-
-    for (const event of response.data["items"]) {
-      let matches = event["$ref"].match(regex); // Get all matches
-      if (matches) {
-        // Filter numbers that are exactly 9 digits long and convert them to numbers
-        let filteredMatches = matches
-          .filter((num) => num.length === 9)
-          .map(Number);
-        weeklyEvents.push(...filteredMatches); // Add them to the array
-      }
+  for (const event of response.data["items"]) {
+    let matches = event["$ref"].match(regex); // Get all matches
+    if (matches) {
+      // Filter numbers that are exactly 9 digits long and convert them to numbers
+      let filteredMatches = matches
+        .filter((num) => num.length === 9)
+        .map(Number);
+      weeklyEvents.push(...filteredMatches); // Add them to the array
     }
   }
 

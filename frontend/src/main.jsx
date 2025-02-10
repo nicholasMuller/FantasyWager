@@ -17,6 +17,7 @@ import RegisterScreen from "./screens/RegisterScreen.jsx";
 import ProfileScreen from "./screens/ProfileScreen.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import NFLOddsScreen from "./screens/NFL/NFLOddsPage.jsx";
+import NBAOddsScreen from "./screens/NBA/NBAOddsPage.jsx";
 import UserBetsScreen from "./screens/UserBetsScreen.jsx";
 
 const router = createBrowserRouter(
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
         <Route path="/bets" element={<UserBetsScreen />} />
       </Route>
       <Route path="/NFLodds" element={<NFLOddsScreen />}></Route>
+      <Route path="/NBAodds" element={<NBAOddsScreen />}></Route>
     </Route>
   )
 );

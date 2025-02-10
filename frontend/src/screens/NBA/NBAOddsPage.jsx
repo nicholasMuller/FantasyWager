@@ -1,5 +1,5 @@
 import { usePlaceBetMutation } from "../../slices/usersApiSlice";
-import { getNFLEvents } from "../../slices/NFL/getNFLEvents";
+import { getNBAEvents } from "../../slices/NBA/getNBAEvents";
 import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import MatchupCard from "../../components/MatchupCard";
 
-const NFLOddsScreen = () => {
+const NBAOddsScreen = () => {
   const [placeBet, { isLoading: isPlacingBet }] = usePlaceBetMutation(); // Use the mutation
   const [matchups, setWeekData] = useState([]);
   const [selectedBets, setSelectedBets] = useState({});
@@ -17,11 +17,11 @@ const NFLOddsScreen = () => {
   useEffect(() => {
     const getWeekData = async () => {
       try {
-        const weekData = await getNFLEvents();
+        const weekData = await getNBAEvents();
         setWeekData(weekData);
       } catch (error) {
         console.log(error);
-        setError("Failed to load NFL week data");
+        setError("Failed to load NBA week data");
       } finally {
         setLoading(false);
       }
@@ -115,4 +115,4 @@ const NFLOddsScreen = () => {
   );
 };
 
-export default NFLOddsScreen;
+export default NBAOddsScreen;
