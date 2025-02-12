@@ -1,9 +1,6 @@
 import { usePlaceBetMutation } from "../../slices/usersApiSlice";
 import { getNBAEvents } from "../../slices/NBA/getNBAEvents";
 import { useEffect, useState } from "react";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import MatchupCard from "../../components/MatchupCard";
 
@@ -52,16 +49,6 @@ const NBAOddsScreen = () => {
           }
 
           const [betType, team, winDiff, odds] = parts;
-          // console.log(
-          //   "Parsed values - betType:",
-          //   betType,
-          //   "team:",
-          //   team,
-          //   "winDiff:",
-          //   winDiff,
-          //   "odds:",
-          //   odds
-          // );
 
           const betData = {
             matchID: matchId,
@@ -89,16 +76,16 @@ const NBAOddsScreen = () => {
   // console.log(matchups);
   return (
     <div>
-      <h1>NFL Odds Page</h1>
+      <h1>NBA Odds Page</h1>
       <Button onClick={handleSubmit} variant="primary">
         Submit Bets
       </Button>
-      <Container>
-        <Row>
+      <div className="container">
+        <div className="row row-cols-2">
           {matchups.map(
             (match) =>
               match["eventInfo"]["status"] === "STATUS_SCHEDULED" && (
-                <Col key={match["eventInfo"]["gameId"]}>
+                <div className="col" key={match["eventInfo"]["gameId"]}>
                   <MatchupCard
                     match={match}
                     onSelectionChange={handleSelection}
@@ -106,11 +93,11 @@ const NBAOddsScreen = () => {
                       selectedBets[match["eventInfo"]["gameId"]] || []
                     }
                   />
-                </Col>
+                </div>
               )
           )}
-        </Row>
-      </Container>
+        </div>
+      </div>
     </div>
   );
 };
