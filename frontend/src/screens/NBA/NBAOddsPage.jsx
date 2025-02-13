@@ -81,7 +81,7 @@ const NBAOddsScreen = () => {
         Submit Bets
       </Button>
       <div className="container">
-        <div className="row row-cols-2">
+        <div className="row">
           {matchups.map(
             (match) =>
               match["eventInfo"]["status"] === "STATUS_SCHEDULED" && (

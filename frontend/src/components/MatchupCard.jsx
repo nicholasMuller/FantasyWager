@@ -24,7 +24,7 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
               />
             </div>
             <div className="col col d-flex text-center justify-content-center align-items-center">
-              <div className="team-name ">{team.displayName}</div>
+              <div className="team-name">{team.displayName}</div>
             </div>
           </div>
         </div>
