@@ -9,11 +9,11 @@
 }
 
 .team-name {
-  font-size: smaller;
+  font-size: small;
 }
 
 .toggle-button {
-  font-size: x-small;
+  font-size: small;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 

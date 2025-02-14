@@ -1,13 +1,14 @@
 import { usePlaceBetMutation } from "../../slices/usersApiSlice";
 import { getNBAEvents } from "../../slices/NBA/getNBAEvents";
 import { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom"; // Import useOutletContext
 import Button from "react-bootstrap/Button";
 import MatchupCard from "../../components/MatchupCard";
 
 const NBAOddsScreen = () => {
   const [placeBet, { isLoading: isPlacingBet }] = usePlaceBetMutation(); // Use the mutation
   const [matchups, setWeekData] = useState([]);
-  const [selectedBets, setSelectedBets] = useState({});
+  const [selectedBets, setSelectedBets] = useOutletContext(); // Get state from App.js  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -34,6 +35,7 @@ const NBAOddsScreen = () => {
     }));
   };
 
+  console.log(selectedBets)
   const handleSubmit = async () => {
     try {
       for (const matchId in selectedBets) {

@@ -60,6 +60,7 @@ const Header = () => {
                       Logout
                     </NavDropdown.Item>
                   </NavDropdown>
+                  <button className="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">🛒</button>
                 </>
               ) : (
                 <>
