@@ -42,6 +42,9 @@ const Header = () => {
                 <LinkContainer to="NBAodds">
                   <NavDropdown.Item>NBA</NavDropdown.Item>
                 </LinkContainer>
+                <LinkContainer to="NHLodds">
+                  <NavDropdown.Item>NHL</NavDropdown.Item>
+                </LinkContainer>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>

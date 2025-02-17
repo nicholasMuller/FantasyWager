@@ -6,6 +6,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import MatchupCard from "../../components/MatchupCard";
+import NFLNewsPage from "./NFLNewsPage";
+
 
 const NFLOddsScreen = () => {
   const [placeBet, { isLoading: isPlacingBet }] = usePlaceBetMutation(); // Use the mutation
@@ -21,7 +23,7 @@ const NFLOddsScreen = () => {
         setWeekData(weekData);
       } catch (error) {
         console.log(error);
-        setError("Failed to load NFL week data");
+        setError("There are no games to bet on right now . . .");
       } finally {
         setLoading(false);
       }
@@ -52,16 +54,6 @@ const NFLOddsScreen = () => {
           }
 
           const [betType, team, winDiff, odds] = parts;
-          // console.log(
-          //   "Parsed values - betType:",
-          //   betType,
-          //   "team:",
-          //   team,
-          //   "winDiff:",
-          //   winDiff,
-          //   "odds:",
-          //   odds
-          // );
 
           const betData = {
             matchID: matchId,
@@ -84,8 +76,14 @@ const NFLOddsScreen = () => {
   };
 
   if (loading || isPlacingBet) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
-
+  if (error) { 
+    return ( 
+      <>
+        <p className="display-4 d-flex justify-content-center align-items-center">{error}</p>
+        <NFLNewsPage />
+      </>
+    );
+  }
   // console.log(matchups);
   return (
     <div>

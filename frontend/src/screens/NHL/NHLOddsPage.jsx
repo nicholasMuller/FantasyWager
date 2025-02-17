@@ -1,12 +1,11 @@
 import { usePlaceBetMutation } from "../../slices/usersApiSlice";
-import { getNBAEvents } from "../../slices/NBA/getNBAEvents";
+import { getNHLEvents } from "../../slices/NHL/getNHLEvents";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom"; // Import useOutletContext
-import NBANewsPage from "./NBANewsPage";
 import Button from "react-bootstrap/Button";
 import MatchupCard from "../../components/MatchupCard";
 
-const NBAOddsScreen = () => {
+const NHLOddsScreen = () => {
   const [placeBet, { isLoading: isPlacingBet }] = usePlaceBetMutation(); // Use the mutation
   const [matchups, setWeekData] = useState([]);
   const [selectedBets, setSelectedBets] = useOutletContext(); // Get state from App.js  
@@ -16,11 +15,11 @@ const NBAOddsScreen = () => {
   useEffect(() => {
     const getWeekData = async () => {
       try {
-        const weekData = await getNBAEvents();
+        const weekData = await getNHLEvents();
         setWeekData(weekData);
       } catch (error) {
         console.log(error);
-        setError("There are no games to bet on right now . . .");
+        setError("Failed to load NHL week data");
       } finally {
         setLoading(false);
       }
@@ -74,21 +73,12 @@ const NBAOddsScreen = () => {
   };
 
   if (loading || isPlacingBet) return <p>Loading...</p>;
-  if (error) { 
-    return ( 
-      <>
-        <p className="display-4 d-flex justify-content-center align-items-center">{error}</p>
-        <NBANewsPage />
-      </>
-    );
-  }
-
-
+  if (error) return <p>{error}</p>;
 
   // console.log(matchups);
   return (
     <div>
-      <h1>NBA Odds Page</h1>
+      <h1>NHL Odds Page</h1>
       <Button onClick={handleSubmit} variant="primary">
         Submit Bets
       </Button>
@@ -114,4 +104,4 @@ const NBAOddsScreen = () => {
   );
 };
 
-export default NBAOddsScreen;
+export default NHLOddsScreen;
