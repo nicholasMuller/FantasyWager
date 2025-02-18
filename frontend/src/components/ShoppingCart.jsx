@@ -12,7 +12,7 @@ const ShoppingCart = ({ selectedBets }) => {
       aria-labelledby="offcanvasScrollingLabel"
     >
       <div className="offcanvas-header">
-        <h5 id="offcanvasScrollingLabel">Your Bets</h5>
+        <h5 id="offcanvasScrollingLabel">Bet Slip</h5>
         <button
           type="button"
           className="btn-close"
@@ -26,15 +26,32 @@ const ShoppingCart = ({ selectedBets }) => {
             {Object.entries(selectedBets).map(([matchId, bets]) =>
               bets.map((bet, index) => {
                 
+                const betDetails = bet.split(",")
+                if(betDetails.length == 3){
+                  var [type, total, spread] = betDetails
+                  console.log(type, total, spread)
+                }
+                else if (betDetails.length == 4){
+                  var [type, team, total, spread] = betDetails
+                  console.log(type, team, total, spread)
+                }
                 return(
+              
                 <ListGroup.Item key={`${matchId}-${index}`}>
-                  <strong>{bet}</strong>
+                  <strong>Match ID: {matchId}</strong><br />
+                  <strong>{type}{team && team}</strong><br />
+                  <strong>
+                    {total != 0 
+                      ? `${total} ${spread >= 0 ? `+${spread}` : spread}` 
+                      : spread >= 0 ? `+${spread}` : spread}
+                  </strong>
+                  
                 </ListGroup.Item>
               )})
             )}
           </ListGroup>
         ) : (
-          <p>No bets selected.</p>
+          <p>Bet slip is empty..</p>
         )}
       </div>
     </div>

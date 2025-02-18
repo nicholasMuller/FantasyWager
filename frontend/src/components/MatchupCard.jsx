@@ -38,14 +38,14 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
           >
             <ToggleButton
               id={`${match.eventInfo.gameId}-${teamType}-point-spread`}
-              value={`${matchShortName} POINT_SPREAD ${team.displayName} ${odds.pointSpread} ${odds.spreadOdds}`}
+              value={`Spread, ${team.displayName}, ${odds.pointSpread}, ${odds.spreadOdds}`}
               className="toggle-button"
             >
               {odds.pointSpread} {odds.spreadOdds}
             </ToggleButton>
             <ToggleButton
               id={`${match.eventInfo.gameId}-${teamType}-money-line`}
-              value={`${matchShortName} ML ${team.abbreviation} 0 ${odds.moneyLine}`}
+              value={`Moneyline, ${team.displayName}, 0, ${odds.moneyLine}`}
               className="toggle-button"
             >
               ML {odds.moneyLine}
@@ -54,9 +54,9 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
               id={`${match.eventInfo.gameId}-${teamType}-${
                 isHomeTeam ? "over" : "under"
               }`}
-              value={`${matchShortName} ${isHomeTeam ? "OVER" : "UNDER"} TOTAL ${
+              value={`${isHomeTeam ? "Over," : "Under,"} ${
                 match.odds.totals.overUnder
-              } ${
+              }, ${
                 isHomeTeam
                   ? match.odds.totals.overOdds
                   : match.odds.totals.underOdds

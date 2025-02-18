@@ -36,7 +36,6 @@ const NBAOddsScreen = () => {
     }));
   };
 
-  console.log(selectedBets)
   const handleSubmit = async () => {
     try {
       for (const matchId in selectedBets) {
