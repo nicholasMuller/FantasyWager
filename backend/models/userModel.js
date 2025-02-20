@@ -23,8 +23,13 @@ const userSchema = mongoose.Schema(
         team: String,
         winDiff: String,
         odds: Number,
+        wager: Number,
       },
     ],
+    wallet: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,

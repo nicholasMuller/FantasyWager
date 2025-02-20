@@ -41,6 +41,7 @@ const registerUser = asyncHandler(async (req, res) => {
     name,
     email,
     password,
+    wallet: 200,
   });
 
   if (user) {
@@ -120,16 +121,21 @@ const placeBet = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
-    const { matchID, betType, team, winDiff, odds } = req.body;
-
-    // Create a new bet
-    const newBet = {
-      matchID,
-      betType,
-      team,
-      winDiff,
-      odds,
-    };
+    const { matchID, betType, team, winDiff, odds, wager } = req.body;
+    if (user.wallet - wager >= 0) {
+      // Create a new bet
+      const newBet = {
+        matchID,
+        betType,
+        team,
+        winDiff,
+        odds,
+        wager,
+      };
+    } else {
+      res.status(400);
+      throw new Error("Insufficient Funds");
+    }
 
     // Add the new bet to the user's bets array
     user.bets.push(newBet);
