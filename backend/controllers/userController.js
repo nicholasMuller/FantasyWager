@@ -124,7 +124,7 @@ const placeBet = asyncHandler(async (req, res) => {
     const { matchID, betType, team, winDiff, odds, wager } = req.body;
     if (user.wallet - wager >= 0) {
       // Create a new bet
-      const newBet = {
+      var newBet = {
         matchID,
         betType,
         team,
@@ -139,6 +139,7 @@ const placeBet = asyncHandler(async (req, res) => {
 
     // Add the new bet to the user's bets array
     user.bets.push(newBet);
+    user.wallet = user.wallet - wager;
 
     // Save the updated user
     await user.save();

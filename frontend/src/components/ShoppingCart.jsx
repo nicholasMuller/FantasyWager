@@ -1,6 +1,6 @@
 import { ListGroup, Button } from "react-bootstrap";
 import { Offcanvas } from "bootstrap";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useSelector } from "react";
 import { usePlaceBetMutation } from "../slices/usersApiSlice";
 
 const ShoppingCart = ({ selectedBets }) => {
@@ -27,13 +27,13 @@ const ShoppingCart = ({ selectedBets }) => {
       for (const [matchId, bets] of Object.entries(selectedBets)) {
         for (const bet of bets) {
           const betDetails = bet.split(",");
-          let shortName, type, team, total, spread;
+          let shortName, type, team, winDiff, spread;
 
           if (betDetails.length === 4) {
-            [shortName, type, total, spread] = betDetails;
+            [shortName, type, winDiff, spread] = betDetails;
             team = null;
           } else if (betDetails.length === 5) {
-            [shortName, type, team, total, spread] = betDetails;
+            [shortName, type, team, winDiff, spread] = betDetails;
           } else {
             console.log("Unexpected format:", bet);
             continue;
@@ -45,7 +45,7 @@ const ShoppingCart = ({ selectedBets }) => {
             matchID: matchId,
             betType: type,
             team: team || null,
-            total: total || null,
+            winDiff: winDiff || null,
             spread: spread || null,
             wager,
           };
