@@ -2,6 +2,7 @@ import { ListGroup, Button } from "react-bootstrap";
 import { Offcanvas } from "bootstrap";
 import { useState, useEffect, useSelector } from "react";
 import { usePlaceBetMutation } from "../slices/usersApiSlice";
+import { settleBets } from "../slices/settleBets";
 
 const ShoppingCart = ({ selectedBets }) => {
   const [inputs, setInputs] = useState({});
@@ -46,7 +47,7 @@ const ShoppingCart = ({ selectedBets }) => {
             betType: type,
             team: team || null,
             winDiff: winDiff || null,
-            spread: spread || null,
+            odds: spread || null,
             wager,
           };
 
@@ -62,7 +63,7 @@ const ShoppingCart = ({ selectedBets }) => {
     }
   };
 
-  console.log(selectedBets, inputs);
+  // settleBets();
 
   return (
     <div

@@ -24,6 +24,8 @@ const userSchema = mongoose.Schema(
         winDiff: String,
         odds: Number,
         wager: Number,
+        status: String,
+        potentialPayout: Number,
       },
     ],
     wallet: {

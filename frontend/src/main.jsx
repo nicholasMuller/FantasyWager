@@ -34,7 +34,6 @@ const router = createBrowserRouter(
       <Route path="/NFLodds" element={<NFLOddsScreen />}></Route>
       <Route path="/NBAodds" element={<NBAOddsScreen />}></Route>
       <Route path="/NHLodds" element={<NHLOddsScreen />}></Route>
-
     </Route>
   )
 );

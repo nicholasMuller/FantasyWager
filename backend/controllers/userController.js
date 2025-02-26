@@ -123,6 +123,19 @@ const placeBet = asyncHandler(async (req, res) => {
   if (user) {
     const { matchID, betType, team, winDiff, odds, wager } = req.body;
     if (user.wallet - wager >= 0) {
+      let profit, totalPayout;
+
+      if (odds > 0) {
+        // Positive odds formula
+        profit = (wager * odds) / 100;
+      } else {
+        // Negative odds formula
+        profit = (wager * 100) / Math.abs(odds);
+      }
+
+      totalPayout = wager + profit;
+      totalPayout = totalPayout.toFixed(2);
+
       // Create a new bet
       var newBet = {
         matchID,
@@ -131,6 +144,8 @@ const placeBet = asyncHandler(async (req, res) => {
         winDiff,
         odds,
         wager,
+        status: "pending",
+        potentialPayout: totalPayout,
       };
     } else {
       res.status(400);
@@ -165,6 +180,80 @@ const getUserBets = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Settle User Bets
+// @route   POST /api/users/settleBets
+// @access  Private
+const settleBets = asyncHandler(async (req, res) => {
+  // Find all users with bets on this game
+
+  let game = req.body;
+  const users = await User.find({
+    "bets.matchID": game.gameId,
+    "bets.status": "pending",
+  });
+
+  for (const user of users) {
+    let totalPayout = 0;
+
+    // Loop through each user's bets
+    user.bets.forEach((bet) => {
+      if (bet.matchID === game.gameId && bet.status === "pending") {
+        const won = determineBetOutcome(bet, game);
+
+        if (won) {
+          bet.status = "won";
+          totalPayout += bet.potentialPayout;
+        } else {
+          bet.status = "lost";
+        }
+      }
+    });
+
+    // If the user won any bets, update their wallet
+    if (totalPayout > 0) {
+      user.wallet += totalPayout;
+    }
+
+    // Save the updated user document in MongoDB
+    await user.save();
+    console.log(`Settled bets for user ${user._id}, paid out $${totalPayout}`);
+  }
+});
+
+const determineBetOutcome = (bet, gameResults) => {
+  const { betType, team, winDiff } = bet;
+
+  if (betType === "Moneyline") {
+    if (
+      (team == gameResults.HomeTeam && gameResults.homeTeamIsWinner) ||
+      (team == gameResults.AwayTeam && gameResults.awayTeamIsWinner)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  if (betType === "Spread") {
+    const { HomeTeam, HomeScore, AwayScore } = gameResults;
+    const pointSpread = parseFloat(winDiff);
+
+    const actualMargin =
+      team === HomeTeam ? HomeScore - AwayScore : AwayScore - HomeScore;
+
+    return actualMargin >= pointSpread;
+  }
+
+  if (betType === "Over") {
+    return gameResults.HomeScore + gameResults.AwayScore > parseFloat(winDiff);
+  }
+
+  if (betType === "Under") {
+    return gameResults.HomeScore + gameResults.AwayScore < parseFloat(winDiff);
+  }
+
+  return false; // Default to lost
+};
+
 export {
   authUser,
   registerUser,
@@ -173,4 +262,5 @@ export {
   updateUserProfile,
   placeBet,
   getUserBets,
+  settleBets,
 };
