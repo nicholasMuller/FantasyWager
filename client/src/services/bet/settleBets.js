@@ -10,24 +10,22 @@ export const settleBets = async () => {
       return;
     }
 
-    console.log(`Processing ${finishedGames.length} games...`);
-
-    for (const game of finishedGames) {
-      console.log(`Settling bets . . .`);
-
+    const settlePromises = finishedGames.map(async (game) => {
       try {
         const { data } = await axios.post("/api/users/settleBets", game, {
           headers: { "Content-Type": "application/json" },
         });
-
-        console.log(`Bets settled for Game ID ${game.gameId}:`, data);
+        console.log(data);
       } catch (error) {
         console.error(
           `Error settling bets for Game ID ${game.gameId}:`,
           error.response?.data?.message || error.message
         );
       }
-    }
+    });
+
+    await Promise.all(settlePromises);
+    console.log("All bets settled.");
   } catch (error) {
     console.error("Error fetching finished NBA games:", error.message);
   }

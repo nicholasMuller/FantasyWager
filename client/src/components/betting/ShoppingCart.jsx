@@ -63,7 +63,7 @@ const ShoppingCart = ({ selectedBets }) => {
     }
   };
 
-  // settleBets();
+  settleBets();
 
   return (
     <div

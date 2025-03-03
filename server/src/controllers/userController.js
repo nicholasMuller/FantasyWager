@@ -197,7 +197,7 @@ const settleBets = asyncHandler(async (req, res) => {
 
     // Loop through each user's bets
     user.bets.forEach((bet) => {
-      if (bet.matchID === game.gameId && bet.status === "pending") {
+      if (bet.matchID == game.gameId && bet.status == "pending") {
         const won = determineBetOutcome(bet, game);
 
         if (won) {
@@ -216,14 +216,14 @@ const settleBets = asyncHandler(async (req, res) => {
 
     // Save the updated user document in MongoDB
     await user.save();
-    console.log(`Settled bets for user ${user._id}, paid out $${totalPayout}`);
+    // console.log(`Settled bets for user ${user._id}, paid out $${totalPayout}`);
   }
 });
 
-const determineBetOutcome = (bet, gameResults) => {
+export const determineBetOutcome = (bet, gameResults) => {
   const { betType, team, winDiff } = bet;
 
-  if (betType === "Moneyline") {
+  if (betType == "Moneyline") {
     if (
       (team == gameResults.HomeTeam && gameResults.homeTeamIsWinner) ||
       (team == gameResults.AwayTeam && gameResults.awayTeamIsWinner)
@@ -233,21 +233,21 @@ const determineBetOutcome = (bet, gameResults) => {
     return false;
   }
 
-  if (betType === "Spread") {
+  if (betType == "Spread") {
     const { HomeTeam, HomeScore, AwayScore } = gameResults;
     const pointSpread = parseFloat(winDiff);
 
     const actualMargin =
-      team === HomeTeam ? HomeScore - AwayScore : AwayScore - HomeScore;
+      team == HomeTeam ? HomeScore - AwayScore : AwayScore - HomeScore;
 
     return actualMargin >= pointSpread;
   }
 
-  if (betType === "Over") {
+  if (betType == "Over") {
     return gameResults.HomeScore + gameResults.AwayScore > parseFloat(winDiff);
   }
 
-  if (betType === "Under") {
+  if (betType == "Under") {
     return gameResults.HomeScore + gameResults.AwayScore < parseFloat(winDiff);
   }
 
