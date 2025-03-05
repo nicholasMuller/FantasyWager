@@ -1,19 +1,22 @@
-import { getNBAEvents } from "../../services/bet/getNBAEvents";
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom"; // Import useOutletContext
 import NBANewsPage from "../news/NBANewsPage";
 import MatchupCard from "../../components/betting/MatchupCard";
+import getAllLeagueEvents from "../../services/bet/getAllLeagueEvents";
 
-const NBAOddsScreen = () => {
+const OddsScreen = () => {
   const [matchups, setWeekData] = useState([]);
-  const [selectedBets, setSelectedBets] = useOutletContext(); // Get state from App.js
+  const [selectedBets, setSelectedBets, league] = useOutletContext(); // Get state from App.js
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    setLoading(true); // Reset loading when league changes
+    setError(null); // Clear previous errors when league changes
+
     const getWeekData = async () => {
       try {
-        const weekData = await getNBAEvents();
+        const weekData = await getAllLeagueEvents(league, true);
         setWeekData(weekData);
       } catch (error) {
         console.log(error);
@@ -24,7 +27,7 @@ const NBAOddsScreen = () => {
     };
 
     getWeekData();
-  }, []);
+  }, [league]);
 
   const handleSelection = (matchId, selectedValues) => {
     setSelectedBets((prevSelections) => ({
@@ -40,15 +43,14 @@ const NBAOddsScreen = () => {
         <p className="display-4 d-flex justify-content-center align-items-center">
           {error}
         </p>
-        <NBANewsPage />
+        {/* <NBANewsPage /> */}
       </>
     );
   }
 
-  // console.log(matchups);
   return (
     <div>
-      <h1>NBA Odds Page</h1>
+      <h1>{league} Odds Page</h1>
 
       <div className="container">
         <div className="row">
@@ -72,4 +74,4 @@ const NBAOddsScreen = () => {
   );
 };
 
-export default NBAOddsScreen;
+export default OddsScreen;

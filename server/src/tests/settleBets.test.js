@@ -87,9 +87,10 @@ describe("settleBets function", function () {
           {
             matchID: "789",
             betType: "Under",
-            winDiff: "210.5",
+            winDiff: "210",
             status: "pending",
             potentialPayout: 75,
+            wager: 10,
           },
           {
             matchID: "456",
@@ -214,5 +215,16 @@ describe("settleBets function", function () {
 
     const noBetUser = await User.findOne({ email: "timmy@gmail.com" });
     expect(noBetUser.wallet).to.equal(200); // ✅ No changes to wallet
+  });
+
+  // ✅ TEST CASE 8: Bet is a Push
+  it("should correctly settle a push bet", async function () {
+    const req = { body: { gameId: "789", HomeScore: 110, AwayScore: 100 } };
+    const res = { json: () => {}, status: () => res };
+
+    await settleBets(req, res);
+
+    const underUser = await User.findOne({ email: "shaq@gmail.com" });
+    expect(underUser.wallet).to.equal(410);
   });
 });

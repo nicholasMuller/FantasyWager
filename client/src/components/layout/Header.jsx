@@ -1,13 +1,11 @@
-// import { Navbar, Nav, Container, NavDropdown, Badge } from 'react-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
-import { LinkContainer } from "react-router-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../../services/user/usersApiSlice";
 import { logout } from "../../store/slices/authSlice";
 
-const Header = () => {
+const Header = ({ league, setLeague }) => {
   const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -25,26 +23,31 @@ const Header = () => {
     }
   };
 
+  // Function to update league state and navigate
+  const handleLeagueChange = (selectedLeague) => {
+    setLeague(selectedLeague); // Update league state
+    navigate("/odds"); // Navigate to odds page
+  };
+
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container>
-          <LinkContainer to="/">
-            <Navbar.Brand>Fantasy Wager</Navbar.Brand>
-          </LinkContainer>
+          <Navbar.Brand href="/">Fantasy Wager</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
+              {/* League Dropdown without LinkContainer */}
               <NavDropdown title="League" id="League">
-                <LinkContainer to="NFLodds">
-                  <NavDropdown.Item>NFL</NavDropdown.Item>
-                </LinkContainer>
-                <LinkContainer to="NBAodds">
-                  <NavDropdown.Item>NBA</NavDropdown.Item>
-                </LinkContainer>
-                <LinkContainer to="NHLodds">
-                  <NavDropdown.Item>NHL</NavDropdown.Item>
-                </LinkContainer>
+                <NavDropdown.Item onClick={() => handleLeagueChange("nfl")}>
+                  NFL
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => handleLeagueChange("nba")}>
+                  NBA
+                </NavDropdown.Item>
+                <NavDropdown.Item onClick={() => handleLeagueChange("nhl")}>
+                  NHL
+                </NavDropdown.Item>
               </NavDropdown>
             </Nav>
           </Navbar.Collapse>
@@ -53,12 +56,8 @@ const Header = () => {
               {userInfo ? (
                 <>
                   <NavDropdown title={userInfo.name} id="username">
-                    <LinkContainer to="/profile">
-                      <NavDropdown.Item>Profile</NavDropdown.Item>
-                    </LinkContainer>
-                    <LinkContainer to="/bets">
-                      <NavDropdown.Item>Bets</NavDropdown.Item>
-                    </LinkContainer>
+                    <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+                    <NavDropdown.Item href="/bets">Bets</NavDropdown.Item>
                     <NavDropdown.Item onClick={logoutHandler}>
                       Logout
                     </NavDropdown.Item>
@@ -70,21 +69,17 @@ const Header = () => {
                     data-bs-target="#offcanvasScrolling"
                     aria-controls="offcanvasScrolling"
                   >
-                    🛒
+                    Bet Slip
                   </button>
                 </>
               ) : (
                 <>
-                  <LinkContainer to="/login">
-                    <Nav.Link>
-                      <FaSignInAlt /> Sign In
-                    </Nav.Link>
-                  </LinkContainer>
-                  <LinkContainer to="/register">
-                    <Nav.Link>
-                      <FaSignOutAlt /> Sign Up
-                    </Nav.Link>
-                  </LinkContainer>
+                  <Nav.Link href="/login">
+                    <FaSignInAlt /> Sign In
+                  </Nav.Link>
+                  <Nav.Link href="/register">
+                    <FaSignOutAlt /> Sign Up
+                  </Nav.Link>
                 </>
               )}
             </Nav>

@@ -8,13 +8,14 @@ import { useState } from "react";
 
 const App = () => {
   const [selectedBets, setSelectedBets] = useState({});
+  const [league, setLeague] = useState();
   return (
     <>
-      <Header />
+      <Header league={league} setLeague={setLeague} />
       <ShoppingCart selectedBets={selectedBets} />
       <ToastContainer />
       <Container className="my-2">
-        <Outlet context={[selectedBets, setSelectedBets]} />
+        <Outlet context={[selectedBets, setSelectedBets, league]} />
       </Container>
     </>
   );

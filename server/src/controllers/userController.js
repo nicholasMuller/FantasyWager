@@ -200,11 +200,14 @@ const settleBets = asyncHandler(async (req, res) => {
       if (bet.matchID == game.gameId && bet.status == "pending") {
         const won = determineBetOutcome(bet, game);
 
-        if (won) {
+        if (won == true) {
           bet.status = "won";
           totalPayout += bet.potentialPayout;
-        } else {
+        } else if (won == false) {
           bet.status = "lost";
+        } else if (won == null) {
+          bet.status = "push";
+          totalPayout += bet.wager;
         }
       }
     });
@@ -223,35 +226,39 @@ const settleBets = asyncHandler(async (req, res) => {
 export const determineBetOutcome = (bet, gameResults) => {
   const { betType, team, winDiff } = bet;
 
-  if (betType == "Moneyline") {
+  if (betType === "Moneyline") {
     if (
-      (team == gameResults.HomeTeam && gameResults.homeTeamIsWinner) ||
-      (team == gameResults.AwayTeam && gameResults.awayTeamIsWinner)
+      (team === gameResults.HomeTeam && gameResults.homeTeamIsWinner) ||
+      (team === gameResults.AwayTeam && gameResults.awayTeamIsWinner)
     ) {
       return true;
     }
     return false;
   }
 
-  if (betType == "Spread") {
+  if (betType === "Spread") {
     const { HomeTeam, HomeScore, AwayScore } = gameResults;
     const pointSpread = parseFloat(winDiff);
-
     const actualMargin =
-      team == HomeTeam ? HomeScore - AwayScore : AwayScore - HomeScore;
+      team === HomeTeam ? HomeScore - AwayScore : AwayScore - HomeScore;
 
-    return actualMargin >= pointSpread;
+    if (actualMargin === pointSpread) return null; // Push scenario
+    return actualMargin > pointSpread;
   }
 
-  if (betType == "Over") {
-    return gameResults.HomeScore + gameResults.AwayScore > parseFloat(winDiff);
+  if (betType === "Over") {
+    const totalScore = gameResults.HomeScore + gameResults.AwayScore;
+    if (totalScore === parseFloat(winDiff)) return null; // Push scenario
+    return totalScore > parseFloat(winDiff);
   }
 
-  if (betType == "Under") {
-    return gameResults.HomeScore + gameResults.AwayScore < parseFloat(winDiff);
+  if (betType === "Under") {
+    const totalScore = gameResults.HomeScore + gameResults.AwayScore;
+    if (totalScore === parseFloat(winDiff)) return null; // Push scenario
+    return totalScore < parseFloat(winDiff);
   }
 
-  return false; // Default to lost
+  throw new Error(`Unknown bet type: ${betType}`); // Instead of returning null, throw an error if betType is invalid
 };
 
 export {
