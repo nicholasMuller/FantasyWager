@@ -29,6 +29,8 @@ const getSingleLeagueEvent = async (eventId, league, withOdds) => {
   const matchup = {
     eventInfo: {
       gameId: eventId || null,
+      sport: sports[league],
+      league: league,
       name: eventResponse["name"],
       status: status.data["type"]["name"],
       season: {

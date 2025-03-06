@@ -28,13 +28,13 @@ const ShoppingCart = ({ selectedBets }) => {
       for (const [matchId, bets] of Object.entries(selectedBets)) {
         for (const bet of bets) {
           const betDetails = bet.split(",");
-          let shortName, type, team, winDiff, spread;
+          let shortName, type, team, winDiff, spread, league;
 
-          if (betDetails.length === 4) {
-            [shortName, type, winDiff, spread] = betDetails;
+          if (betDetails.length === 5) {
+            [shortName, type, winDiff, spread, league] = betDetails;
             team = null;
-          } else if (betDetails.length === 5) {
-            [shortName, type, team, winDiff, spread] = betDetails;
+          } else if (betDetails.length === 6) {
+            [shortName, type, team, winDiff, spread, league] = betDetails;
           } else {
             console.log("Unexpected format:", bet);
             continue;
@@ -44,6 +44,7 @@ const ShoppingCart = ({ selectedBets }) => {
 
           const betData = {
             matchID: matchId,
+            league: league,
             betType: type,
             team: team || null,
             winDiff: winDiff || null,
@@ -88,13 +89,13 @@ const ShoppingCart = ({ selectedBets }) => {
               {Object.entries(selectedBets).map(([matchId, bets]) =>
                 bets.map((bet, index) => {
                   const betDetails = bet.split(",");
-                  let shortName, type, team, total, spread;
+                  let shortName, type, team, total, spread, league;
 
-                  if (betDetails.length === 4) {
-                    [shortName, type, total, spread] = betDetails;
+                  if (betDetails.length === 5) {
+                    [shortName, type, total, spread, league] = betDetails;
                     team = null;
-                  } else if (betDetails.length === 5) {
-                    [shortName, type, team, total, spread] = betDetails;
+                  } else if (betDetails.length === 6) {
+                    [shortName, type, team, total, spread, league] = betDetails;
                   } else {
                     console.log("Unexpected format:", bet);
                     return null;

@@ -121,7 +121,7 @@ const placeBet = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
-    const { matchID, betType, team, winDiff, odds, wager } = req.body;
+    const { matchID, league, betType, team, winDiff, odds, wager } = req.body;
     if (user.wallet - wager >= 0) {
       let profit, totalPayout;
 
@@ -139,6 +139,7 @@ const placeBet = asyncHandler(async (req, res) => {
       // Create a new bet
       var newBet = {
         matchID,
+        league,
         betType,
         team,
         winDiff,

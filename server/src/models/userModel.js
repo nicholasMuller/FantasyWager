@@ -19,6 +19,7 @@ const userSchema = mongoose.Schema(
     bets: [
       {
         matchID: String,
+        league: String,
         betType: String,
         team: String,
         winDiff: String,

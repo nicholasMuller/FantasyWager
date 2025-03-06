@@ -31,7 +31,6 @@ const getWeeklyGameIds = async (league) => {
       weeklyEvents.push(...filteredMatches); // Add them to the array
     }
   }
-  console.log(weeklyEvents);
   return weeklyEvents;
 };
 

@@ -11,6 +11,7 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
     const odds = match.odds[teamType];
     const isHomeTeam = teamType === "homeTeam";
     const matchShortName = match.eventInfo.name;
+    const league = match.eventInfo.league;
 
     return (
       <div className="team-row row my-2">
@@ -37,14 +38,14 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
           >
             <ToggleButton
               id={`${match.eventInfo.gameId}-${teamType}-point-spread`}
-              value={`${matchShortName},Spread, ${team.displayName}, ${odds.pointSpread}, ${odds.spreadOdds}`}
+              value={`${matchShortName},Spread, ${team.displayName}, ${odds.pointSpread}, ${odds.spreadOdds},${league}`}
               className="toggle-button"
             >
               {odds.pointSpread} {odds.spreadOdds}
             </ToggleButton>
             <ToggleButton
               id={`${match.eventInfo.gameId}-${teamType}-money-line`}
-              value={`${matchShortName},Moneyline, ${team.displayName}, 0, ${odds.moneyLine}`}
+              value={`${matchShortName},Moneyline, ${team.displayName}, 0, ${odds.moneyLine},${league}`}
               className="toggle-button"
             >
               ML {odds.moneyLine}
@@ -59,7 +60,7 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
                 isHomeTeam
                   ? match.odds.totals.overOdds
                   : match.odds.totals.underOdds
-              }`}
+              },${league}`}
               className="toggle-button"
             >
               {isHomeTeam ? "O" : "U"} {match.odds.totals.overUnder}{" "}
