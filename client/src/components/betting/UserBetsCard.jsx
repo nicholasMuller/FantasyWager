@@ -21,8 +21,6 @@ const UserBetsCard = ({ bet }) => {
     getEventInfo();
   }, [bet.matchID, bet.league]);
 
-  console.log(bet);
-
   if (loading) return <p>Loading...</p>;
   if (error) {
     return (
@@ -44,7 +42,7 @@ const UserBetsCard = ({ bet }) => {
   return (
     <div className="matchup-card container border border-3 rounded m-3">
       <div className="row my-2">
-        <div className="col-6 d-flex justify-content-center align-items-center">
+        <div className="col-6 d-flex justify-content-center align-items-center mb-1">
           <img
             src={homeTeam.logo}
             alt={`${homeTeam.displayName} logo`}
@@ -74,18 +72,22 @@ const UserBetsCard = ({ bet }) => {
         <div className="col d-flex flex-column justify-content-center align-items-center"></div>
         {bet.team ? (
           <p className="spread mb-1">
-            {bet.team.trim()} {bet.winDiff} {bet.odds}
+            <strong>
+              {bet.team.trim()} {bet.winDiff} {bet.odds}
+            </strong>
           </p>
         ) : (
           <p className="bet-type mb-1">
-            {bet.betType} {bet.odds}
+            <strong>
+              {bet.betType} {bet.odds}
+            </strong>
           </p>
         )}
         <p className="wager mb-1">
-          <strong>Wager:</strong> ${bet.wager}
+          <strong>Wager: ${bet.wager}</strong>
         </p>
-        <p className="payout mb-1">
-          <strong>Potential Payout:</strong> ${bet.potentialPayout}
+        <p className="payout mb-1 text-end">
+          <strong>Potential Payout: ${bet.potentialPayout}</strong>
         </p>
       </div>
     </div>

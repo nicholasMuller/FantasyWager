@@ -50,7 +50,7 @@ const OddsScreen = () => {
 
   return (
     <div>
-      <h1>{league} Odds Page</h1>
+      <h1>{league.toUpperCase()} Odds Page</h1>
 
       <div className="container">
         <div className="row">
