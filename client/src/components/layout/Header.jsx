@@ -1,4 +1,10 @@
-import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import {
+  Navbar,
+  Nav,
+  Container,
+  NavDropdown,
+  NavbarBrand,
+} from "react-bootstrap";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +35,7 @@ const Header = ({ league, setLeague }) => {
     navigate("/odds"); // Navigate to odds page
   };
 
+  console.log(userInfo);
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
@@ -62,6 +69,11 @@ const Header = ({ league, setLeague }) => {
                       Logout
                     </NavDropdown.Item>
                   </NavDropdown>
+                  <div className="d-flex justify-content-center align-items-center mx-2 h-100">
+                    <NavbarBrand className="text-success m-0">
+                      ${userInfo.wallet.toFixed(2)}
+                    </NavbarBrand>
+                  </div>
                   <button
                     className="btn btn-primary"
                     type="button"

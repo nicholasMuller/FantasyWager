@@ -1,9 +1,9 @@
 import axios from "axios";
-import { getFinishedNBAGames } from "./getFinishedGames";
+import { getFinishedGames } from "./getFinishedGames";
 
 export const settleBets = async () => {
   try {
-    const finishedGames = await getFinishedNBAGames();
+    const finishedGames = await getFinishedGames();
 
     if (finishedGames.length === 0) {
       console.log("No finished games to settle.");
@@ -15,10 +15,9 @@ export const settleBets = async () => {
         const { data } = await axios.post("/api/users/settleBets", game, {
           headers: { "Content-Type": "application/json" },
         });
-        console.log(data);
       } catch (error) {
         console.error(
-          `Error settling bets for Game ID ${game.gameId}:`,
+          `Error settling bets for Game ID ${game.gameId}, ${game.homeTeam} vs ${game.awayTeam}:`,
           error.response?.data?.message || error.message
         );
       }
@@ -27,6 +26,6 @@ export const settleBets = async () => {
     await Promise.all(settlePromises);
     console.log("All bets settled.");
   } catch (error) {
-    console.error("Error fetching finished NBA games:", error.message);
+    console.error("Error fetching games:", error.message);
   }
 };

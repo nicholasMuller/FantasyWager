@@ -17,6 +17,7 @@ const authUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      wallet: user.wallet,
     });
   } else {
     res.status(401);
@@ -51,6 +52,7 @@ const registerUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      wallet: user.wallet,
     });
   } else {
     res.status(400);
@@ -80,6 +82,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      wallet: user.wallet,
     });
   } else {
     res.status(404);
@@ -185,77 +188,102 @@ const getUserBets = asyncHandler(async (req, res) => {
 // @route   POST /api/users/settleBets
 // @access  Private
 const settleBets = asyncHandler(async (req, res) => {
-  // Find all users with bets on this game
+  console.log(`⏳ Settling bets for Game ID: ${req.body.gameId}`);
 
-  let game = req.body;
-  const users = await User.find({
-    "bets.matchID": game.gameId,
-    "bets.status": "pending",
-  });
+  try {
+    let game = req.body;
 
-  for (const user of users) {
-    let totalPayout = 0;
-
-    // Loop through each user's bets
-    user.bets.forEach((bet) => {
-      if (bet.matchID == game.gameId && bet.status == "pending") {
-        const won = determineBetOutcome(bet, game);
-
-        if (won == true) {
-          bet.status = "won";
-          totalPayout += bet.potentialPayout;
-        } else if (won == false) {
-          bet.status = "lost";
-        } else if (won == null) {
-          bet.status = "push";
-          totalPayout += bet.wager;
-        }
-      }
-    });
-
-    // If the user won any bets, update their wallet
-    if (totalPayout > 0) {
-      user.wallet += totalPayout;
+    if (!game || !game.gameId) {
+      console.error("🚨 Error: Invalid game data received", game);
+      return res.status(400).json({ message: "Invalid game data" });
     }
 
-    // Save the updated user document in MongoDB
-    await user.save();
-    // console.log(`Settled bets for user ${user._id}, paid out $${totalPayout}`);
+    const users = await User.find({
+      "bets.matchID": game.gameId,
+      "bets.status": "pending",
+    });
+
+    console.log(
+      `🔍 Found ${users.length} users with pending bets for Game ID: ${game.gameId}`
+    );
+
+    for (const user of users) {
+      console.log(`Processing user ${user._id}`);
+
+      let totalPayout = 0;
+
+      for (const bet of user.bets) {
+        console.log(`➡️ Checking bet ${bet.matchID}:`, bet);
+
+        if (bet.matchID == game.gameId && bet.status == "pending") {
+          const won = determineBetOutcome(bet, game);
+          console.log(`🎯 Outcome for bet ${bet.matchID}:`, won);
+
+          if (won === true) {
+            bet.status = "won";
+            totalPayout += bet.potentialPayout;
+          } else if (won === false) {
+            bet.status = "lost";
+          } else if (won === null) {
+            bet.status = "push";
+            totalPayout += bet.wager;
+          }
+        }
+      }
+
+      if (totalPayout > 0) {
+        user.wallet += totalPayout;
+      }
+
+      // Force update to MongoDB
+      await user.updateOne({ $set: { bets: user.bets } });
+
+      console.log(`✅ Bets settled for user ${user._id}, wallet updated.`);
+    }
+
+    console.log(`✅ Finished settling bets for Game ID: ${game.gameId}`);
+    res
+      .status(200)
+      .json({ message: `Bets settled for Game ID: ${game.gameId}` });
+  } catch (error) {
+    console.error("❌ ERROR in settleBets:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
 export const determineBetOutcome = (bet, gameResults) => {
   const { betType, team, winDiff } = bet;
 
-  if (betType === "Moneyline") {
+  if (betType == "Moneyline") {
     if (
-      (team === gameResults.HomeTeam && gameResults.homeTeamIsWinner) ||
-      (team === gameResults.AwayTeam && gameResults.awayTeamIsWinner)
+      (team == gameResults.homeTeam && gameResults.homeTeamIsWinner) ||
+      (team == gameResults.awayTeam && gameResults.awayTeamIsWinner)
     ) {
       return true;
     }
     return false;
   }
 
-  if (betType === "Spread") {
-    const { HomeTeam, HomeScore, AwayScore } = gameResults;
+  if (betType == "Spread") {
+    const { homeTeam, homeScore, awayScore } = gameResults;
     const pointSpread = parseFloat(winDiff);
     const actualMargin =
-      team === HomeTeam ? HomeScore - AwayScore : AwayScore - HomeScore;
+      team == homeTeam ? homeScore - awayScore : awayScore - homeScore;
 
-    if (actualMargin === pointSpread) return null; // Push scenario
-    return actualMargin > pointSpread;
+    if (actualMargin == pointSpread) return null; // Push scenario
+
+    return actualMargin + pointSpread > 0;
   }
 
-  if (betType === "Over") {
-    const totalScore = gameResults.HomeScore + gameResults.AwayScore;
-    if (totalScore === parseFloat(winDiff)) return null; // Push scenario
+  if (betType == "Over") {
+    const totalScore = gameResults.homeScore + gameResults.awayScore;
+    if (totalScore == parseFloat(winDiff)) return null; // Push scenario
     return totalScore > parseFloat(winDiff);
   }
 
-  if (betType === "Under") {
-    const totalScore = gameResults.HomeScore + gameResults.AwayScore;
-    if (totalScore === parseFloat(winDiff)) return null; // Push scenario
+  if (betType == "Under") {
+    const totalScore = gameResults.homeScore + gameResults.awayScore;
+    if (totalScore == parseFloat(winDiff)) return null; // Push scenario
     return totalScore < parseFloat(winDiff);
   }
 

@@ -1,24 +1,34 @@
 import axios from "axios";
 
-export const getFinishedNBAGames = async () => {
+export const getFinishedGames = async () => {
+  let sports = { nba: "basketball", nfl: "football", nhl: "hockey" };
+
   try {
-    let response = await axios.get(
-      `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${getYesterdayDate()}`
+    // Fetch all responses concurrently
+    const responses = await Promise.all(
+      Object.entries(sports).map(([league, sport]) =>
+        axios.get(
+          `https://site.api.espn.com/apis/site/v2/sports/${sport}/${league}/scoreboard?dates=${getYesterdayDate()}`
+        )
+      )
     );
 
-    const games = await response.data.events;
+    // Extract games from each response
+    let allGames = responses.flatMap((response) =>
+      response.data.events
+        .filter((game) => game.status.type.name === "STATUS_FINAL")
+        .map((game) => ({
+          gameId: game.id,
+          homeTeam: game.competitions[0].competitors[0].team.displayName,
+          awayTeam: game.competitions[0].competitors[1].team.displayName,
+          homeScore: game.competitions[0].competitors[0].score,
+          awayScore: game.competitions[0].competitors[1].score,
+          homeTeamIsWinner: game.competitions[0].competitors[0].winner,
+          awayTeamIsWinner: game.competitions[0].competitors[1].winner,
+        }))
+    );
 
-    return games
-      .filter((game) => game.status.type.name == "STATUS_FINAL")
-      .map((game) => ({
-        gameId: game.id,
-        homeTeam: game.competitions[0].competitors[0].team.displayName,
-        awayTeam: game.competitions[0].competitors[1].team.displayName,
-        homeScore: game.competitions[0].competitors[0].score,
-        awayScore: game.competitions[0].competitors[1].score,
-        homeTeamIsWinner: game.competitions[0].competitors[0].winner,
-        awayTeamIsWinner: game.competitions[0].competitors[1].winner,
-      }));
+    return allGames;
   } catch (error) {
     console.error("Error fetching finished games:", error);
     return [];
@@ -31,9 +41,8 @@ const getYesterdayDate = () => {
   yesterday.setDate(yesterday.getDate() - 1);
 
   const year = yesterday.getFullYear();
-  const month = String(yesterday.getMonth() + 1).padStart(2, "0"); // Ensure 2-digit month
-  const day = String(yesterday.getDate()).padStart(2, "0"); // Ensure 2-digit day
+  const month = String(yesterday.getMonth() + 1).padStart(2, "0");
+  const day = String(yesterday.getDate()).padStart(2, "0");
 
-  const formattedDate = `${year}${month}${day}`;
-  return formattedDate;
+  return `${year}${month}${day}`;
 };

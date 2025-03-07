@@ -32,6 +32,8 @@ const userSchema = mongoose.Schema(
     wallet: {
       type: Number,
       required: true,
+      default: 200.0,
+      set: (v) => parseFloat(v.toFixed(2)),
     },
   },
   {

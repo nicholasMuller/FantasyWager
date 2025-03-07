@@ -38,14 +38,14 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
           >
             <ToggleButton
               id={`${match.eventInfo.gameId}-${teamType}-point-spread`}
-              value={`${matchShortName},Spread, ${team.displayName}, ${odds.pointSpread}, ${odds.spreadOdds},${league}`}
+              value={`${matchShortName},Spread,${team.displayName},${odds.pointSpread},${odds.spreadOdds},${league}`}
               className="toggle-button"
             >
               {odds.pointSpread} {odds.spreadOdds}
             </ToggleButton>
             <ToggleButton
               id={`${match.eventInfo.gameId}-${teamType}-money-line`}
-              value={`${matchShortName},Moneyline, ${team.displayName}, 0, ${odds.moneyLine},${league}`}
+              value={`${matchShortName},Moneyline,${team.displayName},0,${odds.moneyLine},${league}`}
               className="toggle-button"
             >
               ML {odds.moneyLine}
@@ -54,9 +54,9 @@ const MatchupCard = ({ match, onSelectionChange, selectedBets }) => {
               id={`${match.eventInfo.gameId}-${teamType}-${
                 isHomeTeam ? "over" : "under"
               }`}
-              value={`${matchShortName},${isHomeTeam ? "Over," : "Under,"} ${
+              value={`${matchShortName},${isHomeTeam ? "Over," : "Under,"}${
                 match.odds.totals.overUnder
-              }, ${
+              },${
                 isHomeTeam
                   ? match.odds.totals.overOdds
                   : match.odds.totals.underOdds
